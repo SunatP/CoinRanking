@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CoinRanking</string>
+    <string name="Description">Description:</string>
+    <string name="Detail">No Detail</string>
+</resources>
