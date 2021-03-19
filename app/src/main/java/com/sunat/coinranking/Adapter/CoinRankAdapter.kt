@@ -2,6 +2,8 @@ package com.sunat.coinranking.Adapter
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +27,7 @@ class CoinRankAdapter(
     class CoinRankViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         /**
          * ViewHolder from coin_adapter_layout.xml
-         **/
+         */
         var coinName = view.findViewById(R.id.coinName) as TextView
         var coinDescription = view.findViewById(R.id.coinDescription) as TextView
         var coinIcon = view.findViewById(R.id.coinIcon) as ImageView
@@ -34,17 +36,23 @@ class CoinRankAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinRankViewHolder {
 
         val v = LayoutInflater.from(parent.context).inflate(R.layout.coin_adapter_layout,parent,false)
-        println(v)
         return CoinRankViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: CoinRankViewHolder, position: Int) {
-        /** Bind CoinAdapter layout to this class **/
+        /**
+         * Bind CoinAdapter layout to this class
+         */
         holder.apply {
             coinName.text = CoinName[position]
-            coinDescription.text = Description[position]
+            // We got html tag inside description we need to display in HTML as default
+            coinDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                Html.fromHtml(Description[position], Html.FROM_HTML_MODE_COMPACT)
+            }
+            else{
+                Html.fromHtml(Description[position])
+            }
             // what we got is https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg
-
             val uri = Uri.parse(Icon[position])
             Log.d("uri Tag", uri.toString())
             coinIcon.loadSvg(Icon[position])
